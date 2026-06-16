@@ -62,11 +62,18 @@
 
 ## Installation
 
-```bash
+```powershell
 git clone https://github.com/lavastoviglie/grafo-heatmap.git
 cd grafo-heatmap
-pip install -r requirements.txt
-python -m spacy download it_core_news_sm
+.\run.ps1
+```
+
+Or manually:
+```powershell
+python -m venv venv
+venv\Scripts\pip install -r requirements.txt
+venv\Scripts\python -m spacy download it_core_news_sm
+venv\Scripts\python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
 ---
@@ -83,10 +90,13 @@ python -m spacy download it_core_news_sm
 
 Then open `http://localhost:8000` in your browser.
 
-### Manual start
+### Manual setup (if not using run.ps1)
 
 ```bash
-uvicorn backend.main:app --host 127.0.0.1 --port 8000
+python -m venv venv
+venv\Scripts\pip install -r requirements.txt
+venv\Scripts\python -m spacy download it_core_news_sm
+venv\Scripts\python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
 ### Stop the server
