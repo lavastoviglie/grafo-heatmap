@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grafo Heatmap - Visualizzatore Testi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app" class="theme-dark">
+  <div id="sidebar">
+    <h2>Controlli</h2>
+    <div class="control-group">
+      <label>Carica testo</label>
+      <textarea id="text-input" rows="5" placeholder="Incolla il testo qui..."></textarea>
+      <input type="file" id="file-input" accept=".txt">
+      <button id="analyze-btn">Analizza</button>
+    </div>
+    <div class="control-group" id="search-group">
+      <label for="search-input">Cerca parola nel grafo</label>
+      <div class="search-wrap">
+        <input type="text" id="search-input" placeholder="Scrivi per cercare..." autocomplete="off">
+        <span id="search-count"></span>
+        <div id="search-results" class="hidden"></div>
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="window-size">Finestra co-occorrenza: <span id="window-size-val">5</span></label>
+      <input type="range" id="window-size" min="2" max="15" value="5">
+    </div>
+    <div class="control-group">
+      <label for="top-concepts">Concetti heatmap: <span id="top-concepts-val">20</span></label>
+      <input type="range" id="top-concepts" min="5" max="40" value="20">
+    </div>
+    <div class="control-group">
+      <label for="min-freq">Freq. minima parole: <span id="min-freq-val">2</span></label>
+      <input type="range" id="min-freq" min="1" max="10" value="2">
+    </div>
+    <div class="control-group">
+      <label for="edge-threshold">Soglia archi: <span id="edge-threshold-val">5</span>%</label>
+      <input type="range" id="edge-threshold" min="0" max="20" value="5">
+    </div>
+    <div class="control-group">
+      <label for="edge-opacity">Opacità archi: <span id="edge-opacity-val">25</span>%</label>
+      <input type="range" id="edge-opacity" min="5" max="100" value="25">
+    </div>
+
+    <div class="separator"></div>
+    <label class="group-label">Grafica</label>
+
+    <div class="control-group">
+      <label for="color-scheme">Tavolozza colori</label>
+      <select id="color-scheme">
+        <option value="viridis">Viridis</option>
+        <option value="magma">Magma</option>
+        <option value="plasma">Plasma</option>
+        <option value="inferno">Inferno</option>
+        <option value="turbo">Turbo</option>
+        <option value="cividis">Cividis</option>
+        <option value="twilight">Twilight</option>
+        <option value="bluered">Blu-Rosso</option>
+        <option value="rainbow">Arcobaleno</option>
+        <option value="greens">Verde</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="bg-theme">Sfondo</label>
+      <select id="bg-theme">
+        <option value="dark">Scuro (default)</option>
+        <option value="light">Chiaro</option>
+        <option value="purple">Viola</option>
+        <option value="ocean">Oceano</option>
+      </select>
+    </div>
+
+    <div class="separator"></div>
+    <label class="group-label">Grafo</label>
+
+    <div class="control-group toggle-group">
+      <label>Movimento automatico</label>
+      <label class="toggle">
+        <input type="checkbox" id="physics-toggle" checked>
+        <span class="toggle-slider"></span>
+        <span class="toggle-label" id="physics-label">On</span>
+      </label>
+    </div>
+    <div class="control-group toggle-group">
+      <label>Interazione manuale</label>
+      <label class="toggle">
+        <input type="checkbox" id="interaction-toggle" checked>
+        <span class="toggle-slider"></span>
+        <span class="toggle-label" id="interaction-label">On</span>
+      </label>
+    </div>
+    <div class="control-group">
+      <label for="node-dist">Distanza nodi: <span id="node-dist-val">80</span></label>
+      <input type="range" id="node-dist" min="20" max="250" value="80">
+    </div>
+    <div class="control-group">
+      <label for="velocity-slider">Velocità movimento: <span id="velocity-val">15</span></label>
+      <input type="range" id="velocity-slider" min="1" max="40" value="15">
+    </div>
+    <div class="control-group toggle-group">
+      <label>Raggruppa parole simili</label>
+      <label class="toggle">
+        <input type="checkbox" id="group-toggle">
+        <span class="toggle-slider"></span>
+        <span class="toggle-label" id="group-label">Off</span>
+      </label>
+    </div>
+
+    <div class="separator"></div>
+    <div class="control-group">
+      <label>Info</label>
+      <div id="info">
+        <p id="node-count">Nodi: 0</p>
+        <p id="edge-count">Archi: 0</p>
+        <p id="concept-count">Concetti: 0</p>
+      </div>
+    </div>
+  </div>
+  <div id="text-panel" class="hidden">
+    <div id="text-panel-header">
+      <span id="text-panel-title">Parola</span>
+      <button id="text-panel-close">&times;</button>
+    </div>
+    <div id="text-panel-content"></div>
+  </div>
+  <div id="main">
+    <div id="graph-container">
+      <div id="graph"></div>
+    </div>
+    <div id="heatmap-container">
+      <div id="heatmap-header">
+        <h3>Heatmap: Concetti &times; Sezioni del testo</h3>
+      </div>
+      <div id="heatmap-wrapper">
+        <canvas id="heatmap-canvas"></canvas>
+        <div id="heatmap-tooltip"></div>
+      </div>
+      <div id="heatmap-colorbar"></div>
+    </div>
+  </div>
+  <div id="doc-viewer" class="hidden">
+    <div id="doc-viewer-header">
+      <span>Documento originale</span>
+      <button id="doc-viewer-close">&times;</button>
+    </div>
+    <div id="doc-viewer-content"></div>
+  </div>
+</div>
+<script src="https://unpkg.com/vis-network@9.1.9/dist/vis-network.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
