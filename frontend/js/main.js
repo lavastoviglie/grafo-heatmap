@@ -31,7 +31,7 @@ document.getElementById('velocity-slider').addEventListener('input', function() 
 
 document.getElementById('physics-toggle').addEventListener('change', function() {
   physicsEnabled = this.checked;
-  document.getElementById('physics-label').textContent = physicsEnabled ? 'On' : 'Off';
+  document.getElementById('physics-label').textContent = t(physicsEnabled ? 'on' : 'off');
   if (network) {
     network.setOptions({ physics: { enabled: physicsEnabled } });
     if (physicsEnabled) {
@@ -42,7 +42,7 @@ document.getElementById('physics-toggle').addEventListener('change', function() 
 
 document.getElementById('interaction-toggle').addEventListener('change', function() {
   interactionEnabled = this.checked;
-  document.getElementById('interaction-label').textContent = interactionEnabled ? 'On' : 'Off';
+  document.getElementById('interaction-label').textContent = t(interactionEnabled ? 'on' : 'off');
   if (network) {
     network.setOptions({
       interaction: {
@@ -54,8 +54,7 @@ document.getElementById('interaction-toggle').addEventListener('change', functio
 });
 
 document.getElementById('group-toggle').addEventListener('change', function() {
-  const label = document.getElementById('group-label');
-  label.textContent = this.checked ? 'On' : 'Off';
+  document.getElementById('group-label').textContent = t(this.checked ? 'on' : 'off');
   if (currentData) renderGraph(currentData);
 });
 
@@ -103,9 +102,18 @@ document.getElementById('doc-viewer-close').addEventListener('click', function()
   document.getElementById('doc-viewer').classList.add('hidden');
 });
 
+document.getElementById('lang-select').addEventListener('change', function() {
+  applyLanguage(this.value);
+  if (currentData) {
+    document.getElementById('node-count').textContent = `${t('infoNodes')}: ${currentData.nodes.length}`;
+    document.getElementById('edge-count').textContent = `${t('infoEdges')}: ${currentData.edges.length}`;
+    document.getElementById('concept-count').textContent = `${t('infoConcepts')}: ${currentData.heatmap.concepts.length}`;
+  }
+});
+
 async function analyzeText() {
   const btn = document.getElementById('analyze-btn');
-  btn.textContent = 'Analizzando...';
+  btn.textContent = t('analyzing');
   btn.disabled = true;
   const textarea = document.getElementById('text-input');
   let text = textarea.value.trim();
@@ -120,7 +128,7 @@ async function analyzeText() {
       reader.readAsText(fileInput.files[0]);
       return;
     }
-    btn.textContent = 'Analizza';
+    btn.textContent = t('analyzeBtn');
     btn.disabled = false;
     return;
   }
@@ -149,18 +157,19 @@ async function doAnalyze(text) {
     renderGraph(data);
     renderHeatmap(data.heatmap);
     drawColorbar(document.getElementById('color-scheme').value);
-    document.getElementById('node-count').textContent = `Nodi: ${data.nodes.length}`;
-    document.getElementById('edge-count').textContent = `Archi: ${data.edges.length}`;
-    document.getElementById('concept-count').textContent = `Concetti: ${data.heatmap.concepts.length}`;
+    document.getElementById('node-count').textContent = `${t('infoNodes')}: ${data.nodes.length}`;
+    document.getElementById('edge-count').textContent = `${t('infoEdges')}: ${data.edges.length}`;
+    document.getElementById('concept-count').textContent = `${t('infoConcepts')}: ${data.heatmap.concepts.length}`;
   } catch (err) {
     console.error(err);
-    alert("Errore durante l'analisi del testo.");
+    alert(t('analyzeError'));
   } finally {
-    btn.textContent = 'Analizza';
+    btn.textContent = t('analyzeBtn');
     btn.disabled = false;
   }
 }
 
 window.addEventListener('load', function() {
+  applyLanguage('en');
   drawColorbar('viridis');
 });

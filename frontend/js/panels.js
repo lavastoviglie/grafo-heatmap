@@ -9,9 +9,9 @@ function showTextPanel(nodeId) {
   const escapedForms = forms.map(f => f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
   const regex = new RegExp(`(${escapedForms.join('|')})`, 'gi');
 
-  let html = `<div class="text-panel-count">${sentences.length} occorrenze nel testo</div>`;
+  let html = `<div class="text-panel-count">${sentences.length} ${t('occurrences')}</div>`;
   if (sentences.length === 0) {
-    html += '<div class="no-sentences">Nessuna frase trovata</div>';
+    html += `<div class="no-sentences">${t('noSentences')}</div>`;
   } else {
     for (const sent of sentences) {
       const highlight = sent.text.replace(regex, '<strong>$1</strong>');
@@ -35,7 +35,7 @@ function showGroupTextPanel(group) {
   const panel = document.getElementById('text-panel');
   const title = document.getElementById('text-panel-title');
   const content = document.getElementById('text-panel-content');
-  title.textContent = `Gruppo: "${group.centroid_word}" (${group.words.length} parole)`;
+  title.textContent = `${t('groupLabel')}: "${group.centroid_word}" (${group.words.length} ${t('words')})`;
 
   let html = '';
   for (const word of group.words) {
@@ -51,7 +51,7 @@ function showGroupTextPanel(group) {
     }
   }
 
-  if (!html) html = '<div class="no-sentences">Nessuna frase trovata</div>';
+  if (!html) html = `<div class="no-sentences">${t('noSentences')}</div>`;
 
   content.innerHTML = html;
   panel.classList.remove('hidden');

@@ -56,7 +56,7 @@ function showSearchSuggestions(q) {
 
 searchInput.addEventListener('focus', function() {
   if (!currentData) return;
-  document.getElementById('search-count').textContent = `Nodi totali: ${getSearchWords().length}`;
+  document.getElementById('search-count').textContent = `${t('searchCount')}: ${getSearchWords().length}`;
   showSearchSuggestions('');
 });
 searchInput.addEventListener('input', function() {

@@ -1,55 +1,64 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grafo Heatmap - Visualizzatore Testi</title>
+<title>Grafo Heatmap</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="app" class="theme-dark">
   <div id="sidebar">
-    <h2>Controlli</h2>
+    <h2>Grafo Heatmap</h2>
+
     <div class="control-group">
-      <label>Carica testo</label>
-      <textarea id="text-input" rows="5" placeholder="Incolla il testo qui..."></textarea>
+      <label data-i18n="language">Language</label>
+      <select id="lang-select">
+        <option value="en">English</option>
+        <option value="it">Italiano</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label data-i18n="loadText">Load text</label>
+      <textarea id="text-input" rows="5" data-i18n-placeholder="textPlaceholder" placeholder="Paste your text here..."></textarea>
       <input type="file" id="file-input" accept=".txt">
-      <button id="analyze-btn">Analizza</button>
+      <button id="analyze-btn" data-i18n="analyzeBtn">Analyze</button>
     </div>
     <div class="control-group" id="search-group">
-      <label for="search-input">Cerca parola nel grafo</label>
+      <label for="search-input" data-i18n="searchLabel">Search word in graph</label>
       <div class="search-wrap">
-        <input type="text" id="search-input" placeholder="Scrivi per cercare..." autocomplete="off">
+        <input type="text" id="search-input" data-i18n-placeholder="searchPlaceholder" placeholder="Type to search..." autocomplete="off">
         <span id="search-count"></span>
         <div id="search-results" class="hidden"></div>
       </div>
     </div>
     <div class="control-group">
-      <label for="window-size">Finestra co-occorrenza: <span id="window-size-val">5</span></label>
+      <label for="window-size"><span data-i18n="windowSize">Co-occurrence window</span>: <span id="window-size-val">5</span></label>
       <input type="range" id="window-size" min="2" max="15" value="5">
     </div>
     <div class="control-group">
-      <label for="top-concepts">Concetti heatmap: <span id="top-concepts-val">20</span></label>
+      <label for="top-concepts"><span data-i18n="heatmapConcepts">Heatmap concepts</span>: <span id="top-concepts-val">20</span></label>
       <input type="range" id="top-concepts" min="5" max="40" value="20">
     </div>
     <div class="control-group">
-      <label for="min-freq">Freq. minima parole: <span id="min-freq-val">2</span></label>
+      <label for="min-freq"><span data-i18n="minFreq">Min. word frequency</span>: <span id="min-freq-val">2</span></label>
       <input type="range" id="min-freq" min="1" max="10" value="2">
     </div>
     <div class="control-group">
-      <label for="edge-threshold">Soglia archi: <span id="edge-threshold-val">5</span>%</label>
+      <label for="edge-threshold"><span data-i18n="edgeThreshold">Edge threshold</span>: <span id="edge-threshold-val">5</span>%</label>
       <input type="range" id="edge-threshold" min="0" max="20" value="5">
     </div>
     <div class="control-group">
-      <label for="edge-opacity">Opacità archi: <span id="edge-opacity-val">25</span>%</label>
+      <label for="edge-opacity"><span data-i18n="edgeOpacity">Edge opacity</span>: <span id="edge-opacity-val">25</span>%</label>
       <input type="range" id="edge-opacity" min="5" max="100" value="25">
     </div>
 
     <div class="separator"></div>
-    <label class="group-label">Grafica</label>
+    <label class="group-label" data-i18n="graphics">Graphics</label>
 
     <div class="control-group">
-      <label for="color-scheme">Tavolozza colori</label>
+      <label for="color-scheme" data-i18n="colorPalette">Color palette</label>
       <select id="color-scheme">
         <option value="viridis">Viridis</option>
         <option value="magma">Magma</option>
@@ -58,26 +67,26 @@
         <option value="turbo">Turbo</option>
         <option value="cividis">Cividis</option>
         <option value="twilight">Twilight</option>
-        <option value="bluered">Blu-Rosso</option>
-        <option value="rainbow">Arcobaleno</option>
-        <option value="greens">Verde</option>
+        <option value="bluered">Blue-Red</option>
+        <option value="rainbow">Rainbow</option>
+        <option value="greens">Green</option>
       </select>
     </div>
     <div class="control-group">
-      <label for="bg-theme">Sfondo</label>
+      <label for="bg-theme" data-i18n="background">Background</label>
       <select id="bg-theme">
-        <option value="dark">Scuro (default)</option>
-        <option value="light">Chiaro</option>
-        <option value="purple">Viola</option>
-        <option value="ocean">Oceano</option>
+        <option value="dark" data-i18n="bgDark">Dark (default)</option>
+        <option value="light" data-i18n="bgLight">Light</option>
+        <option value="purple" data-i18n="bgPurple">Purple</option>
+        <option value="ocean" data-i18n="bgOcean">Ocean</option>
       </select>
     </div>
 
     <div class="separator"></div>
-    <label class="group-label">Grafo</label>
+    <label class="group-label" data-i18n="graphSection">Graph</label>
 
     <div class="control-group toggle-group">
-      <label>Movimento automatico</label>
+      <label data-i18n="autoMovement">Auto movement</label>
       <label class="toggle">
         <input type="checkbox" id="physics-toggle" checked>
         <span class="toggle-slider"></span>
@@ -85,7 +94,7 @@
       </label>
     </div>
     <div class="control-group toggle-group">
-      <label>Interazione manuale</label>
+      <label data-i18n="manualInteraction">Manual interaction</label>
       <label class="toggle">
         <input type="checkbox" id="interaction-toggle" checked>
         <span class="toggle-slider"></span>
@@ -93,15 +102,15 @@
       </label>
     </div>
     <div class="control-group">
-      <label for="node-dist">Distanza nodi: <span id="node-dist-val">80</span></label>
+      <label for="node-dist"><span data-i18n="nodeDistance">Node distance</span>: <span id="node-dist-val">80</span></label>
       <input type="range" id="node-dist" min="20" max="250" value="80">
     </div>
     <div class="control-group">
-      <label for="velocity-slider">Velocità movimento: <span id="velocity-val">15</span></label>
+      <label for="velocity-slider"><span data-i18n="movementSpeed">Movement speed</span>: <span id="velocity-val">15</span></label>
       <input type="range" id="velocity-slider" min="1" max="40" value="15">
     </div>
     <div class="control-group toggle-group">
-      <label>Raggruppa parole simili</label>
+      <label data-i18n="groupWords">Group similar words</label>
       <label class="toggle">
         <input type="checkbox" id="group-toggle">
         <span class="toggle-slider"></span>
@@ -111,17 +120,17 @@
 
     <div class="separator"></div>
     <div class="control-group">
-      <label>Info</label>
+      <label data-i18n="info">Info</label>
       <div id="info">
-        <p id="node-count">Nodi: 0</p>
-        <p id="edge-count">Archi: 0</p>
-        <p id="concept-count">Concetti: 0</p>
+        <p id="node-count">Nodes: 0</p>
+        <p id="edge-count">Edges: 0</p>
+        <p id="concept-count">Concepts: 0</p>
       </div>
     </div>
   </div>
   <div id="text-panel" class="hidden">
     <div id="text-panel-header">
-      <span id="text-panel-title">Parola</span>
+      <span id="text-panel-title">Word</span>
       <button id="text-panel-close">&times;</button>
     </div>
     <div id="text-panel-content"></div>
@@ -132,7 +141,7 @@
     </div>
     <div id="heatmap-container">
       <div id="heatmap-header">
-        <h3>Heatmap: Concetti &times; Sezioni del testo</h3>
+        <h3 data-i18n="heatmapTitle">Heatmap: Concepts &times; Text Sections</h3>
       </div>
       <div id="heatmap-wrapper">
         <canvas id="heatmap-canvas"></canvas>
@@ -143,7 +152,7 @@
   </div>
   <div id="doc-viewer" class="hidden">
     <div id="doc-viewer-header">
-      <span>Documento originale</span>
+      <span data-i18n="docViewerTitle">Original Document</span>
       <button id="doc-viewer-close">&times;</button>
     </div>
     <div id="doc-viewer-content"></div>
@@ -152,6 +161,7 @@
 <script src="https://unpkg.com/vis-network@9.1.9/dist/vis-network.min.js"></script>
 <script src="js/colors.js"></script>
 <script src="js/themes.js"></script>
+<script src="js/lang.js"></script>
 <script src="js/main.js"></script>
 <script src="js/search.js"></script>
 <script src="js/graph.js"></script>

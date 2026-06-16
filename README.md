@@ -42,6 +42,7 @@
 ### Interface
 - 10 **colour palettes** and 4 **themes** (dark, light, purple, ocean)
 - **Search bar** with dynamic suggestions, keyboard navigation, and node focus
+- **Language toggle** — switch between English and Italian on the fly
 - All parameters adjustable in real time without reloading the page
 
 ---
@@ -99,7 +100,7 @@ Or press `Ctrl+C` in the terminal where the server is running.
 ### Workflow
 
 1. **Load a text** — paste it into the textarea or upload a `.txt` file
-2. **Click "Analizza"** — the backend processes the text and returns graph + heatmap data
+2. **Click "Analyze"** — the backend processes the text and returns graph + heatmap data
 3. **Explore the graph** — drag nodes, scroll to zoom, click a node to see its sentences
 4. **Open a sentence** — click any sentence in the side panel to view it highlighted in the original document
 5. **Inspect the heatmap** — the TF-IDF relevance matrix is shown below the graph
@@ -157,6 +158,7 @@ grafo-heatmap/
 │       ├── themes.js        # Theme switching
 │       ├── main.js          # State, UI events, analysis logic
 │       ├── search.js        # Search bar with suggestions and node focus
+│       ├── lang.js          # English/Italian translations and language switch
 │       ├── graph.js         # vis-network graph rendering and interaction
 │       ├── panels.js        # Text panel, document viewer
 │       └── heatmap.js       # Canvas-based TF-IDF heatmap
