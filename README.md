@@ -90,14 +90,13 @@ venv\Scripts\python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 
 Then open `http://localhost:8000` in your browser.
 
-### Manual setup (if not using run.ps1)
+### Desktop shortcut
 
-```bash
-python -m venv venv
-venv\Scripts\pip install -r requirements.txt
-venv\Scripts\python -m spacy download it_core_news_sm
-venv\Scripts\python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
+```powershell
+.\create-shortcut.ps1
 ```
+
+Creates a "Grafo Heatmap" icon on your desktop. Double-click it to start the server.
 
 ### Stop the server
 
@@ -106,6 +105,16 @@ venv\Scripts\python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
 Or press `Ctrl+C` in the terminal where the server is running.
+
+### Update the project
+
+```powershell
+.\update.ps1
+```
+
+Runs `git pull`, updates Python dependencies and the spaCy model.
+
+---
 
 ### Workflow
 
@@ -175,6 +184,8 @@ grafo-heatmap/
 ├── requirements.txt         # Python dependencies
 ├── run.ps1                  # Windows launch script (auto-setup)
 ├── stop.ps1                 # Windows stop script
+├── update.ps1               # Git pull + update dependencies
+├── create-shortcut.ps1      # Create desktop shortcut
 ├── docs.md                  # Technical documentation
 └── README.md                # This file
 ```
